@@ -7,10 +7,12 @@ namespace SimpleCode.MailSender.Business
     public class OcorrenciaDisparoBusiness
 	{
 		private OcorrenciaDisparoData data;
+        private IDataConfig config;
 
 		public OcorrenciaDisparoBusiness(IDataConfig config)
 		{
-			data = new OcorrenciaDisparoData(config);
+			this.data = new OcorrenciaDisparoData(config);
+            this.config = config;
 		}
 
 		public Queue<OcorrenciaDisparoInfo> Listar(int quantidade)
@@ -41,21 +43,15 @@ namespace SimpleCode.MailSender.Business
         public void AtualizarEnvio(OcorrenciaDisparoInfo ocorrenciaDisparo)
 		{
 			data.AtualizarEnvio(ocorrenciaDisparo);
-		}
-
-        public void AtualizarVisitas(OcorrenciaDisparoInfo ocorrenciaDisparo)
-        {
-            data.AtualizarVisitas(ocorrenciaDisparo);
-        }
+		}        
 
         public void PreencherDetalhes(OcorrenciaDisparoInfo ocorrenciaDisparo)
         {
             var homolog = new HomologacaoInfo();
             try
-            {
-                // TODO
-                // homolog.Habilitada = bool.Parse(ConfigurationManager.AppSettings["HomologMode"]);
-                // homolog.Email = ConfigurationManager.AppSettings["HomologEmail"];
+            {                
+                homolog.Habilitada = config.HomologMode;
+                homolog.Email = config.HomologEmail;
             }
             catch
             {

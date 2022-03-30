@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
   </PropertyGroup>  
 
   <ItemGroup>
@@ -9,4 +10,10 @@
     <ProjectReference Include="..\SimpleCode.MailSender.Data\SimpleCode.MailSender.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Suporte\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Suporte\" />
+  </ItemGroup>
 </Project>

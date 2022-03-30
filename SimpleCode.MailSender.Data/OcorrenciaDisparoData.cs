@@ -77,12 +77,14 @@ namespace SimpleCode.MailSender.Data
         {
             using (var conn = GetSqlConnection())
             {
+                var codigo = int.MinValue;
                 var parameters = new DynamicParameters();
-                parameters.Add("Criacao", DateTime.Now, direction: ParameterDirection.Output);
-                parameters.Add("CodigoDisparo", ocorrenciaDisparo.CodigoDisparo, direction: ParameterDirection.Output);
-                parameters.Add("CodigoContato", ocorrenciaDisparo.CodigoContato, direction: ParameterDirection.Output);
-                parameters.Add("Assunto", ocorrenciaDisparo.Subject, direction: ParameterDirection.Output);
-                parameters.Add("Criacao", ocorrenciaDisparo.Body, direction: ParameterDirection.Output);
+                parameters.Add("Codigo", codigo, direction: ParameterDirection.Output);
+                parameters.Add("Criacao", DateTime.Now);
+                parameters.Add("CodigoDisparo", ocorrenciaDisparo.CodigoDisparo);
+                parameters.Add("CodigoContato", ocorrenciaDisparo.CodigoContato);
+                parameters.Add("Assunto", ocorrenciaDisparo.Subject);
+                parameters.Add("HTML", ocorrenciaDisparo.Body);
                 conn.Execute("email.SnapshotDisparoInserir", parameters, commandType: CommandType.StoredProcedure);                
                 conn.Close();
             }
@@ -93,30 +95,16 @@ namespace SimpleCode.MailSender.Data
             using (var conn = GetSqlConnection())
             {
                 var parameters = new DynamicParameters();                
-                parameters.Add("CodigoDisparo", ocorrenciaDisparo.CodigoDisparo, direction: ParameterDirection.Output);
-                parameters.Add("CodigoContato", ocorrenciaDisparo.CodigoContato, direction: ParameterDirection.Output);
-                parameters.Add("Enviado", ocorrenciaDisparo.Enviado, direction: ParameterDirection.Output);
-                parameters.Add("CodigoStatusDisparo", ocorrenciaDisparo.StatusDisparo, direction: ParameterDirection.Output);
-                parameters.Add("UltimaAlteracao", ocorrenciaDisparo.UltimaAlteracao, direction: ParameterDirection.Output);
-                parameters.Add("Tentativas", ocorrenciaDisparo.Tentativas, direction: ParameterDirection.Output);
+                parameters.Add("CodigoDisparo", ocorrenciaDisparo.CodigoDisparo);
+                parameters.Add("CodigoContato", ocorrenciaDisparo.CodigoContato);
+                parameters.Add("Enviado", ocorrenciaDisparo.Enviado);
+                parameters.Add("CodigoStatusDisparo", ocorrenciaDisparo.StatusDisparo);
+                parameters.Add("UltimaAlteracao", ocorrenciaDisparo.UltimaAlteracao);
+                parameters.Add("Tentativas", ocorrenciaDisparo.Tentativas);
                 conn.Execute("email.OcorrenciaDisparoAtualizarEnvio", parameters, commandType: CommandType.StoredProcedure);
                 conn.Close();
             }
 		}
-
-        public void AtualizarVisitas(OcorrenciaDisparoInfo ocorrenciaDisparo)
-        {
-            using (var conn = GetSqlConnection())
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("CodigoDisparo", ocorrenciaDisparo.CodigoDisparo, direction: ParameterDirection.Output);
-                parameters.Add("CodigoContato", ocorrenciaDisparo.CodigoContato, direction: ParameterDirection.Output);
-                parameters.Add("Visitas", ocorrenciaDisparo.Visitas, direction: ParameterDirection.Output);
-                parameters.Add("PrimeiraVisita", ocorrenciaDisparo.PrimeiraVisita, direction: ParameterDirection.Output);
-                conn.Execute("email.OcorrenciaDisparoAtualizarVisitas", parameters, commandType: CommandType.StoredProcedure);
-                conn.Close();
-            }
-        }
 
         public void PreencherDetalhes(OcorrenciaDisparoInfo ocorrenciaDisparo, HomologacaoInfo homolog)
         {            

@@ -27,16 +27,5 @@ namespace SimpleCode.MailSender.Business
 		{
 			data.Inserir(ambiente);
 		}
-
-		public void Atualizar(AmbienteInfo ambiente)
-		{
-			data.Atualizar(ambiente);
-		}
-
-		public void Excluir(int codigo)
-		{
-			data.Excluir(codigo);
-		}
-
 	}
 }

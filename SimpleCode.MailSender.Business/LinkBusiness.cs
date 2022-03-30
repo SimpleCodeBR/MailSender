@@ -96,30 +96,6 @@ namespace SimpleCode.MailSender.Business
             {
                 throw ex;
             }
-        }
-
-        public string AplicarTrackeamento(int codigoMensagem, string html)
-        {
-            // TODO: revisar
-            IList<LinkInfo> links = Listar(codigoMensagem);
-            if(links.Count > 0)
-            {
-                int i;
-                string novoLink, s;
-                foreach (LinkInfo link in links)
-                {
-                    i = 0;
-                    novoLink = link.Endereco;
-                    foreach (LinkParametroRastreamentoInfo parametro in link.ParametrosRastreamento)
-                    {
-                        s = !novoLink.Contains("?") && i == 0 ? "?" : "&";
-                        novoLink += string.Concat(s, parametro.Nome, "=", parametro.Valor);
-                        i++;
-                    }
-                    html = html.Replace(link.Endereco, novoLink);
-                }
-            }
-            return html;
-        }
+        }        
 	}
 }

@@ -40,31 +40,16 @@ namespace SimpleCode.MailSender.Business
         }
 
         public void Inserir(DisparoInfo disparo)
-        {
-            try
+        {       
+            data.Inserir(disparo);
+
+            foreach (DestinatarioInfo destinatario in disparo.Destinatarios)
             {
-                //using (TransactionScope scope = new TransactionScope())
-                //{
-                data.Inserir(disparo);
-
-                foreach (DestinatarioInfo destinatario in disparo.Destinatarios)
-                {
-                    destinatario.CodigoDisparo = disparo.Codigo;
-                    InserirDestinatario(destinatario);
-                }
-
-                GerarOcorrencias(disparo.Codigo);
-
-                /*Thread thread = new Thread(new ParameterizedThreadStart(GerarOcorrencias));
-                thread.Start(disparo.Codigo);*/
-
-                //scope.Complete();
-                //}
+                destinatario.CodigoDisparo = disparo.Codigo;
+                InserirDestinatario(destinatario);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
+            GerarOcorrencias(disparo.Codigo);         
         }
 
         public void Inserir(int codigoAmbiente, int codigoMensagem, string emailDestinatario, params string[] variaveis)
@@ -127,7 +112,7 @@ namespace SimpleCode.MailSender.Business
 
             if (variaveis2.Length > 0 && mensagem.Variaveis.Count > 0 && mensagem.Variaveis.Count > variaveis2.Length)
             {
-                throw new ArgumentException("A quantidade de vari·veis esperada para esta mensagem È maior que a quantidade de valores informados.");
+                throw new ArgumentException("A quantidade de variÔøΩveis esperada para esta mensagem ÔøΩ maior que a quantidade de valores informados.");
             }
 
             var variavelData = new VariavelData(config);
@@ -176,8 +161,11 @@ namespace SimpleCode.MailSender.Business
                 if (variaveis2.Length > 0)
                 {
                     if (i >= variaveis2.Length)
-                        new AlertaInfo(
-                            string.Concat("Valor da vari·vel ", mensagem.Variaveis[i].Nome, " nao fornecido."), TipoAlerta.Alerta).Salvar();
+                    {
+                        var alerta = new AlertaInfo(string.Concat("Valor da vari√°vel ", mensagem.Variaveis[i].Nome, " n√£o fornecido."), TipoAlerta.Alerta);
+                        new AlertaBusiness(config).Inserir(alerta);
+                    }
+                        
                     else
                         valor = variaveis2[i];
                 }
@@ -192,10 +180,10 @@ namespace SimpleCode.MailSender.Business
                         foreach (var var in variaveisDicTratado)
                         {
                             conteudo = string.Concat(conteudo, "Chave: \"" + var.Key + "\" Valor: \"" + var.Value + "\"|");
-                        }
+                        }                       
 
-                        new AlertaInfo(
-                            string.Concat("Valor da vari·vel ", mensagem.Variaveis[i].Nome, " nao fornecido. "), TipoAlerta.Erro, new Exception(string.Concat("Conteudo do dicionario: ", conteudo))).Salvar();
+                        var alerta = new AlertaInfo(string.Concat("Valor da vari√°vel ", mensagem.Variaveis[i].Nome, " n√£o fornecido."), TipoAlerta.Erro, new ApplicationException("Valor do dicion√°rio: " + conteudo));
+                        new AlertaBusiness(config).Inserir(alerta);
                     }
 
                 }
@@ -232,9 +220,8 @@ namespace SimpleCode.MailSender.Business
                 }
                 else
                 {
-                    new AlertaInfo(
-                        string.Concat("Anexo inexistente: ", anexo, " [mensagem ", codigoMensagem, " / contato ",
-                                        codigoDestinatario, "]"), TipoAlerta.Erro).Salvar();
+                    var alerta = new AlertaInfo(string.Concat("Anexo inexistente: ", anexo, " [mensagem ", codigoMensagem, " / contato ", codigoDestinatario, "]"), TipoAlerta.Erro);
+                    new AlertaBusiness(config).Inserir(alerta);
                 }
             }
 
@@ -256,29 +243,17 @@ namespace SimpleCode.MailSender.Business
         {
             if (destinario.Tipo == TipoDestinatario.Contato)
             {
-                data.InserirDestinatario(destinario.CodigoDisparo, int.MinValue, destinario.Codigo);
+                data.InserirDestinatario(destinario.CodigoDisparo, null, destinario.Codigo);
             }
             else if (destinario.Tipo == TipoDestinatario.Grupo)
             {
-                data.InserirDestinatario(destinario.CodigoDisparo, destinario.Codigo, int.MinValue);
+                data.InserirDestinatario(destinario.CodigoDisparo, destinario.Codigo, null);
             }
         }
 
         private void GerarOcorrencias(object codigoDisparo)
         {
-            data.GerarOcorrencias(Convert.ToInt32(codigoDisparo));
-            /*
-            string nomePacote = string.Concat(ConfigurationManager.AppSettings["PathSSIS"], "OcorrenciasDisparo.dtsx");
-            Application application = new Application();
-            Package package = application.LoadPackage(nomePacote, null);
-
-            package.Connections["ConexaoBD"].ConnectionString =
-                string.Concat(ConfigurationManager.ConnectionStrings["MailSender"].ConnectionString, "Provider=SQLNCLI10.1;");
-
-            package.Variables["CodigoDisparo"].Value = codigoDisparo;
-
-            package.Execute();
-             */
+            data.GerarOcorrencias(Convert.ToInt32(codigoDisparo));            
         }
     }
 }

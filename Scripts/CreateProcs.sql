@@ -6,15 +6,14 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE PROCEDURE [config].[AmbienteConsultar]
+CREATE OR ALTER PROCEDURE [config].[AmbienteConsultar]
 	@Codigo int
 AS
 
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT
-		Codigo, Apelido, NomeResponsavel, EmailResponsavel, CodigoCanalHome, CodigoIdiomaPadrao, PermitirTrocaIdiomas, CodigoCanalLinks, CodigoCanalSignin, CodigoUsuarioFaleConosco
+	SELECT Codigo, Apelido, NomeResponsavel, EmailResponsavel
 	FROM config.Ambiente
 	WHERE Codigo = @Codigo
 END
@@ -27,10 +26,9 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE procedure [config].[AmbienteListar]
+CREATE OR ALTER PROCEDURE [config].[AmbienteListar]
 as
-	SELECT
-		Codigo, Apelido, NomeResponsavel, EmailResponsavel, CodigoCanalHome, CodigoIdiomaPadrao, PermitirTrocaIdiomas, CodigoCanalLinks, CodigoCanalSignin, CodigoUsuarioFaleConosco
+	SELECT Codigo, Apelido, NomeResponsavel, EmailResponsavel
 	FROM config.Ambiente
 GO
 
@@ -1338,14 +1336,13 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-
-CREATE PROCEDURE [email].[OcorrenciaDisparoAtualizarEnvio]
+CREATE OR ALTER PROCEDURE [email].[OcorrenciaDisparoAtualizarEnvio]
 	@CodigoDisparo int,
 	@CodigoContato int,
 	@Enviado bit,
-	@CodigoStatusDisparo tinyint,	
+	@CodigoStatusDisparo int,	
 	@UltimaAlteracao datetime,	
-	@Tentativas smallint
+	@Tentativas int
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -2151,4 +2148,27 @@ BEGIN
 END
 GO
 
+SET ANSI_NULLS ON
+GO
 
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE OR ALTER PROCEDURE [config].[AmbienteInserir]
+	@Codigo int OUTPUT,
+	@Apelido varchar(50),
+	@NomeResponsavel varchar(100),
+	@EmailResponsavel varchar(100)
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	INSERT INTO config.Ambiente([Apelido],[NomeResponsavel],[EmailResponsavel])
+	VALUES(@Apelido, @NomeResponsavel, @EmailResponsavel)
+
+	IF @@ERROR = 0
+		SET @Codigo = SCOPE_IDENTITY()
+	ELSE
+		SET @Codigo = -1
+END
+GO

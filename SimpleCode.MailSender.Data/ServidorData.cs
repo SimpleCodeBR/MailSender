@@ -36,6 +36,8 @@ namespace SimpleCode.MailSender.Data
 				command.CommandType = CommandType.StoredProcedure;
 				command.Parameters.AddWithValue("CodigoAmbiente", codigoAmbiente);
 
+				conn.Open();
+
 				using (IDataReader reader = command.ExecuteReader())
 				{
 					while (reader.Read())

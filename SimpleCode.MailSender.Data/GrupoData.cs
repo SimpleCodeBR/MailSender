@@ -42,11 +42,15 @@ namespace SimpleCode.MailSender.Data
 		{
             using (var conn = GetSqlConnection())
             {
-                var parameters = new DynamicParameters();
-                parameters.Add("Codigo", grupo.Codigo, direction: ParameterDirection.Output);
-                parameters.AddDynamicParams(grupo);
-                conn.Execute("email.GrupoInserir", parameters, commandType: CommandType.StoredProcedure);
-                grupo.Codigo = parameters.Get<int>("Codigo");
+                conn.Execute("email.GrupoInserir",
+                    new {
+                        grupo.Codigo,
+                        grupo.CodigoAmbiente,
+                        grupo.Nome,
+                        grupo.Ativo,
+                        grupo.Criacao,
+                        grupo.Sistema
+                    }, commandType: CommandType.StoredProcedure);                
                 conn.Close();
             }
 		}

@@ -70,7 +70,12 @@ namespace SimpleCode.MailSender.Data
 			{
 				var parameters = new DynamicParameters();
 				parameters.Add("Codigo", disparo.Codigo, direction: ParameterDirection.Output);
-				parameters.AddDynamicParams(disparo);
+				parameters.Add("CodigoMensagem", disparo.CodigoMensagem);				
+				parameters.Add("Ativo", disparo.Ativo);
+				parameters.Add("Criacao", disparo.Criacao);
+				parameters.Add("CodigoRemetente", disparo.CodigoRemetente);
+				parameters.Add("CodigoStatusDisparo", disparo.StatusDisparo);
+				parameters.Add("CodigoAmbiente", disparo.CodigoAmbiente);
 				conn.Execute("email.DisparoInserir", parameters, commandType: CommandType.StoredProcedure);
 				disparo.Codigo = parameters.Get<int>("Codigo");
 				conn.Close();
@@ -95,7 +100,7 @@ namespace SimpleCode.MailSender.Data
 			}
 		}
 
-        public void InserirDestinatario(int codigoDisparo, int codigoGrupo, int codigoContato)
+        public void InserirDestinatario(int codigoDisparo, int? codigoGrupo, int? codigoContato)
         {
 			using (var conn = GetSqlConnection())
 			{

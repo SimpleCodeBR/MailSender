@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCode.MailSender.Tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleCode.MailSender.WorkerService", "SimpleCode.MailSender.WorkerService\SimpleCode.MailSender.WorkerService.csproj", "{9A69190B-BE9A-4C4D-9ECE-AC5861B30995}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SimpleCode.MailSender.Database", "SimpleCode.MailSender.Database\SimpleCode.MailSender.Database.sqlproj", "{44C81BBA-6759-4E13-8275-33B51EFCC179}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,12 +39,6 @@ Global
 		{9A69190B-BE9A-4C4D-9ECE-AC5861B30995}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A69190B-BE9A-4C4D-9ECE-AC5861B30995}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A69190B-BE9A-4C4D-9ECE-AC5861B30995}.Release|Any CPU.Build.0 = Release|Any CPU
-		{44C81BBA-6759-4E13-8275-33B51EFCC179}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{44C81BBA-6759-4E13-8275-33B51EFCC179}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{44C81BBA-6759-4E13-8275-33B51EFCC179}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{44C81BBA-6759-4E13-8275-33B51EFCC179}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{44C81BBA-6759-4E13-8275-33B51EFCC179}.Release|Any CPU.Build.0 = Release|Any CPU
-		{44C81BBA-6759-4E13-8275-33B51EFCC179}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

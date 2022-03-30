@@ -50,24 +50,6 @@ namespace SimpleCode.MailSender.Data
 				ambiente.Codigo = parameters.Get<int>("Codigo");
 				conn.Close();
 			}
-		}
-
-		public void Atualizar(AmbienteInfo ambiente)
-		{
-			using (IDbConnection conn = GetSqlConnection())
-            {
-				conn.Execute("config.AmbienteAtualizar", ambiente, commandType: CommandType.StoredProcedure);
-				conn.Close();
-            }
-		}
-
-		public void Excluir(int codigo)
-		{
-			using (IDbConnection conn = GetSqlConnection())
-			{
-				conn.Execute("config.AmbienteExcluir", new { Codigo = codigo }, commandType: CommandType.StoredProcedure);
-				conn.Close();
-			}
-		}
+		}		
 	}
 }

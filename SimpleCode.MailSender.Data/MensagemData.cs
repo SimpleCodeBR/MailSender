@@ -62,9 +62,17 @@ namespace SimpleCode.MailSender.Data
 			{
 				var parameters = new DynamicParameters();
 				parameters.Add("Codigo", mensagem.Codigo, direction: ParameterDirection.Output);
-				parameters.AddDynamicParams(mensagem);
+				parameters.Add("CodigoAmbiente", mensagem.CodigoAmbiente);
+				parameters.Add("Nome", mensagem.Nome);
+				parameters.Add("Assunto", mensagem.Assunto);
+				parameters.Add("HTML", mensagem.HTML);
+				parameters.Add("Ativo", mensagem.Ativo);
+				parameters.Add("Criacao", mensagem.Criacao);
+				parameters.Add("CodigoTipo", mensagem.Tipo);
+
 				conn.Execute("email.MensagemInserir", parameters, commandType: CommandType.StoredProcedure);
 				mensagem.Codigo = parameters.Get<int>("Codigo");
+
 				conn.Close();
 			}
 		}

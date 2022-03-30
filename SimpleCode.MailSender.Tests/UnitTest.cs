@@ -3,7 +3,9 @@ using SimpleCode.MailSender.Business;
 using SimpleCode.MailSender.Data;
 using SimpleCode.MailSender.Model;
 using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace SimpleCode.MailSender.Tests
 {
@@ -14,10 +16,10 @@ namespace SimpleCode.MailSender.Tests
         [SetUp]
         public void Setup()
         {
-            config = new DataConfig();
+            config = ConfigHelper.GetConfig(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
         }
 
-        [Ignore("Pausado")]
+        [Ignore("Testado")]
         [Test]
         public void CriarAmbientes()
         {
@@ -35,7 +37,7 @@ namespace SimpleCode.MailSender.Tests
             Assert.IsTrue(simplecode.Codigo > 0);
         }
 
-        [Ignore("Pausado")]
+        [Ignore("Testado")]
         [Test]
         public void CriarRemetentes()
         {
@@ -46,11 +48,12 @@ namespace SimpleCode.MailSender.Tests
             {
                 var remetente = new RemetenteInfo()
                 {
-                    Apelido = ambiente.Apelido,
+                    Apelido = "Teste",
                     CodigoAmbiente = ambiente.Codigo,
                     Email = "smtpprovider@gmail.com",
-                    Nome = ambiente.Apelido,
-                    Criacao = DateTime.Now
+                    Nome = "Teste",
+                    Criacao = DateTime.Now,
+                    Padrao = true
                 };
                 remetenteBusiness.Inserir(remetente);
 
@@ -58,7 +61,7 @@ namespace SimpleCode.MailSender.Tests
             }            
         }
 
-        [Ignore("Pausado")]
+        [Ignore("Testado")]
         [Test]
         public void CriarServidores()
         {
@@ -73,9 +76,9 @@ namespace SimpleCode.MailSender.Tests
                     CodigoAmbiente = ambiente.Codigo,
                     Endereco = "smtp.gmail.com",
                     Porta = 587,
-                    SSL = true,
-                    Senha = "DomoKun@Smtp1",
-                    Usuario = "smtpprovider@gmail.com"
+                    SSL = true,                    
+                    Usuario = "smtpprovider@gmail.com",
+                    Padrao = true
                 };
 
                 servidorBusiness.Inserir(servidor);
@@ -84,7 +87,7 @@ namespace SimpleCode.MailSender.Tests
             }            
         }
 
-        [Ignore("Pausado")]
+        [Ignore("Testado")]
         [Test]
         public void CriarGrupos()
         {                           
@@ -106,7 +109,7 @@ namespace SimpleCode.MailSender.Tests
             }            
         }
 
-        [Ignore("Pausado")]
+        [Ignore("Testado")]
         [Test]
         public void CriarContatos()
         {
@@ -173,6 +176,7 @@ namespace SimpleCode.MailSender.Tests
             }            
         }
 
+        [Ignore("Testado")]
         [Test]
         public void CriarMensagem()
         {
@@ -180,15 +184,16 @@ namespace SimpleCode.MailSender.Tests
 
             if (ambiente != null)
             {
+                var txt = "Teste do MailSender";
                 var mensagemBusiness = new MensagemBusiness(config);
                 var mensagem = new MensagemInfo()
                 {
-                    Assunto = "Teste",
+                    Assunto = txt,
                     Ativo = true,                    
                     CodigoAmbiente = ambiente.Codigo,
                     Criacao = DateTime.Now,
-                    HTML = "Olá, mundo!",
-                    Nome = "Teste",
+                    HTML = txt,
+                    Nome = txt,
                     Tipo = TipoMensagem.Sistema
                 };
                 mensagemBusiness.Inserir(mensagem);
@@ -200,7 +205,8 @@ namespace SimpleCode.MailSender.Tests
                     CodigoMensagem = mensagem.Codigo,
                     CodigoRemetente = new RemetenteBusiness(config).Listar(ambiente.Codigo).First().Codigo,
                     Criacao = DateTime.Now,
-                    StatusDisparo = StatusDisparo.NaoIniciado                    
+                    StatusDisparo = StatusDisparo.NaoIniciado,
+                    Mensagem = mensagem
                 };
 
                 var grupo = new GrupoBusiness(config).ListarPorAmbiente(ambiente.Codigo).First();
@@ -215,6 +221,14 @@ namespace SimpleCode.MailSender.Tests
 
                 Assert.IsTrue(mensagemBusiness.Listar(ambiente.Codigo).Count > 0);
             }            
+        }
+
+        [Ignore("Testado")]
+        [Test]
+        public void EnviarMensagens()
+        {            
+            var pool = new MessagePool(config);
+            pool.Send(config.QuantidadeEmails);
         }
     }
 }

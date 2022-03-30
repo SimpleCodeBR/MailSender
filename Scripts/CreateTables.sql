@@ -10,13 +10,7 @@ CREATE TABLE [config].[Ambiente](
 	[Apelido] [varchar](50) NOT NULL,
 	[NomeResponsavel] [varchar](100) NULL,
 	[EmailResponsavel] [varchar](100) NULL,
-	[CodigoCanalHome] [int] NULL,
-	[CodigoCanalLinks] [int] NULL,
-	[CodigoCanalSignin] [int] NULL,
-	[CodigoUsuarioFaleConosco] [int] NULL,
-	[CodigoIdiomaPadrao] [int] NULL,
-	[PermitirTrocaIdiomas] [bit] NULL,
- CONSTRAINT [PK_Ambiente] PRIMARY KEY CLUSTERED 
+CONSTRAINT [PK_Ambiente] PRIMARY KEY CLUSTERED 
 (
 	[Codigo] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
@@ -868,4 +862,17 @@ REFERENCES [config].[Ambiente] ([Codigo])
 GO
 
 ALTER TABLE [email].[Grupo] CHECK CONSTRAINT [FK_Grupo_Ambiente]
+GO
+
+INSERT INTO email.TipoMensagem VALUES(1, 'Sistema')
+GO
+
+SET IDENTITY_INSERT email.StatusDisparo ON
+GO
+
+INSERT INTO email.StatusDisparo(Codigo, Descricao) VALUES(1,'Não iniciado')
+INSERT INTO email.StatusDisparo(Codigo, Descricao) VALUES(2,'Em processamento')
+INSERT INTO email.StatusDisparo(Codigo, Descricao) VALUES(3,'Enviado')
+INSERT INTO email.StatusDisparo(Codigo, Descricao) VALUES(4,'Erro')
+INSERT INTO email.StatusDisparo(Codigo, Descricao) VALUES(5,'Limite do agendamento atingido')
 GO

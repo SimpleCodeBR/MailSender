@@ -84,6 +84,8 @@ namespace SimpleCode.MailSender.Data
                 command.Parameters.AddWithValue("CodigoDisparo", codigoDisparo);
                 command.Parameters.AddWithValue("CodigoContato", codigoContato);
 
+                conn.Open();
+
                 using (IDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())

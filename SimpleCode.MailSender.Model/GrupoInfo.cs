@@ -29,7 +29,7 @@ namespace SimpleCode.MailSender.Model
 
 	    public bool Sistema
         { get; set; }
-
+		
         public IList<ContatoInfo> Contatos
         { get; set; }
 	}
