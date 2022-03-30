@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>  
+
+  <ItemGroup>
+    <ProjectReference Include="..\SimpleCode.MailSender.Model\SimpleCode.MailSender.Model.csproj" />
+    <ProjectReference Include="..\SimpleCode.MailSender.Data\SimpleCode.MailSender.Data.csproj" />
+  </ItemGroup>
+
+</Project>
