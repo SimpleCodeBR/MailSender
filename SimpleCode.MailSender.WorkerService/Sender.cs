@@ -1,43 +1,25 @@
 ﻿using SimpleCode.MailSender.Business;
-using System.Timers;
-
+using SimpleCode.MailSender.Data;
 
 namespace SimpleCode.MailSender.WorkerService
 {
-    internal class Sender
-    {
-        private System.Timers.Timer timer;
+    public class Sender
+    {        
         private MessagePool pool;
+        private IDataConfig config;
 
-        public Sender()
-        {
-            pool = new MessagePool(new DataConfig());
+        public int Interval { get; set; }
 
-            SetupTimer();
-        }
+        public Sender(IDataConfig config)
+        {            
+            this.config = config;
+            this.Interval = this.config.Intervalo;
+            pool = new MessagePool(config);            
+        }        
 
-        private void SetupTimer()
-        {
-            timer = new System.Timers.Timer()
-            {
-                Interval = 5000,
-                AutoReset = false,
-                Enabled = true
-            };
-            timer.Elapsed += Timer_Elapsed;
-            timer.Start();
-        }
-
-        private void Send()
-        {
-            timer.Stop();
-            pool.Send(100);
-            timer.Start();
-        }
-
-        private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
-        {
-            Send();
-        }
+        public void Send()
+        {            
+            pool.Send(config.QuantidadeEmails);            
+        }        
     }
 }

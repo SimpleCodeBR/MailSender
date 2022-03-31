@@ -13,5 +13,7 @@
 		int QuantidadeEmails { get; set; }
 
 		string EmailNaoEnviar { get; set; }
+
+		int Intervalo { get; set; }
 	}
 }

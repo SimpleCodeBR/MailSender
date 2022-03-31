@@ -3,10 +3,12 @@ namespace SimpleCode.MailSender.WorkerService
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
+        private readonly Sender _sender;
 
-        public Worker(ILogger<Worker> logger)
+        public Worker(ILogger<Worker> logger, Sender sender)
         {
             _logger = logger;
+            _sender = sender;
         }        
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -14,7 +16,10 @@ namespace SimpleCode.MailSender.WorkerService
             while (!stoppingToken.IsCancellationRequested)
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await Task.Delay(1000, stoppingToken);
+
+                _sender.Send();
+
+                await Task.Delay(_sender.Interval, stoppingToken);
             }
         }
     }

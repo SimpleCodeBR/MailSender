@@ -15,5 +15,7 @@ namespace SimpleCode.MailSender.Business
         public string? EmailNaoEnviar { get; set; }
 
         public int QuantidadeEmails { get; set; }
+
+        public int Intervalo { get; set; }
     }
 }
